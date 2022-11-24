@@ -2,17 +2,10 @@
 ===============
 
 .. toctree::
-   :caption: ૨૦૧૯
+   :caption: By Year
    :maxdepth: 1
 
-   year/2019/Wednesday/index.rst
-   year/2019/Thursday/index.rst
-   year/2019/kids/index.rst
-
-.. toctree::
-   :caption: Past Years
-   :maxdepth: 1
-
+   year/2019/index.rst
    year/2018/index.rst
    year/2017/index.rst
    year/2016/index.rst

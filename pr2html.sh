@@ -1,5 +1,9 @@
 #! /bin/sh
 
+pandoc() {
+    nix run nixpkgs#pandoc -- "$@"
+}
+
 HERE="$(dirname $(realpath $0))"
 
 for F; do
