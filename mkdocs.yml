@@ -1,0 +1,22 @@
+site_name: રાસ-ગરબા સંગ્રહ
+site_author: Paresh Adhia
+theme:
+  name: material
+  logo: assets/amba.png
+  features:
+    - navigation.tabs
+    - navigation.tracking
+    - navigation.indexes
+    - navigation.footer
+
+copyright: Copyright &copy; 2013 - 2024 Charlotte Navratri Group
+
+extra:
+  generator: false
+
+markdown_extensions:
+  - toc:
+      permalink: True
+
+extra_css:
+  - stylesheets/extra.css

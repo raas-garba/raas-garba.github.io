@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "raas-garba"
+authors = [ {name = "Paresh Adhia", email = "padhia+github@gmail.com"} ]
+dependencies = [ "PyYAML" ]
+description = "Library of Raas & Garba lyrics used by the Charlotte volunteer team"
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = ["Programming Language :: Python :: 3"]
+dynamic = ["version"]
+
+[tool.setuptools]
+py-modules = ["mklinks"]
+
+[project.scripts]
+mklinks = "mklinks:cli"
+
+[tool.setuptools.dynamic]
+version = {attr = "mklinks.__version__"}
+
+[tool.ruff]
+target-version = "py312"
+line-length = 130
+lint.extend-select = ["I"]
