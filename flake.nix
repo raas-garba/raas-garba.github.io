@@ -9,23 +9,30 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       with nixpkgs.legacyPackages.${system};
-      {
+      let
         devShells.default = mkShell {
           name = "mkdocs";
           venvDir = "./.venv";
-          buildInputs = with python312Packages; [
-            python312
+          buildInputs = with python3Packages; [
+            python3
             ruff
             build
             wheel
             mkdocs-material
+            mkdocs-awesome-pages-plugin
             venvShellHook
             pyyaml
           ];
         };
 
+        mkdocs = python3.withPackages (p: with p; [ mkdocs-material mkdocs-awesome-pages-plugin ]);
+
+        packages.default = mkdocs;
         apps.default.type = "app";
-        apps.default.program = "${python312.withPackages (p: with p; [ mkdocs-material ])}/bin/mkdocs";
+        apps.default.program = "${mkdocs}/bin/mkdocs";
+
+      in {
+        inherit devShells packages apps;
       }
     );
 }

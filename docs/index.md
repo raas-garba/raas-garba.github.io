@@ -1,9 +1,10 @@
-# The Team
+# સ્વાગત
+
+Charlotte નવરાત્રી મંડળનાં રાસ-ગરબા સંગ્રહની વેબસાઇટ પર તમારુ સ્વાગત છે.
 
 ## Music Adaptation
 
-Music for the live performances is adapted by **Kirit Shukla** of
-Charlotte.
+Music for the live performances is adapted by **Kirit Shukla** of Charlotte.
 
 ## Singers
 
