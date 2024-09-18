@@ -8,35 +8,34 @@ __version__ = "0.1.0"
 import sys
 from argparse import ArgumentTypeError
 from pathlib import Path
-from typing import Any, Iterable, TypeAlias, cast
+from tomllib import load
+from typing import Any, Iterable, cast
 
-from yaml import safe_load  # type: ignore
-
-Schedule: TypeAlias = dict[str, "Schedule"] | list[str]
+type Schedule = dict[str, Schedule | list[str]]
 
 
 def main(docs_dir: Path) -> None:
     "script entry-point"
     lib = {p.stem: p for d in docs_dir.iterdir() for p in d.resolve().rglob("*.md") if p.is_file()}
 
-    schedules = (d for d in docs_dir.rglob("schedule.yml"))
+    schedules = (d for d in docs_dir.rglob("*.toml"))
     for s in schedules:
         fill_schedule(s, lib)
 
 
 def fill_schedule(schedule_file: Path, lib: dict[str, Path]):
-    with schedule_file.open() as f:
-        schedule = cast(Schedule, safe_load(f))
+    with schedule_file.open("rb") as f:
+        schedule = cast(Schedule, load(f))
 
     def iterpath(o: Schedule, parent: Path) -> Iterable[tuple[Path, Path | None]]:
-        if isinstance(o, list):
-            for v in o:
-                yield (parent / f"{v}.md", lib.get(v))
-        else:
-            for k, v in o.items():
+        for k, v in o.items():
+            if isinstance(v, list):
+                yield from ((parent / k / f"{x}.md", lib.get(x)) for x in v)
+            else:
                 yield from iterpath(v, parent / str(k))
 
-    links = dict(iterpath(schedule, schedule_file.parent))
+
+    links = dict(iterpath(schedule, schedule_file.parent / schedule_file.stem))
     for d in {k.parent for k, v in links.items() if v is not None}:
         d.mkdir(parents=True, exist_ok=True)
 

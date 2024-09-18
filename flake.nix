@@ -14,22 +14,28 @@
           name = "mkdocs";
           venvDir = "./.venv";
           buildInputs = with python3Packages; [
+            mkdocs-material
+            mkdocs-awesome-pages-plugin
             python3
             ruff
             build
             wheel
-            mkdocs-material
-            mkdocs-awesome-pages-plugin
             venvShellHook
-            pyyaml
           ];
         };
 
-        mkdocs = python3.withPackages (p: with p; [ mkdocs-material mkdocs-awesome-pages-plugin ]);
+        mkdocs = python3.withPackages (p: with p; [
+          mkdocs-material
+          mkdocs-awesome-pages-plugin
+        ]);
 
-        packages.default = mkdocs;
+        serve-docs = pkgs.writeShellScriptBin "serve-docs" ''
+          exec "${mkdocs}/bin/mkdocs" serve
+        '';
+
+        packages.default = serve-docs;
         apps.default.type = "app";
-        apps.default.program = "${mkdocs}/bin/mkdocs";
+        apps.default.program = "${packages.default}/bin/serve-docs";
 
       in {
         inherit devShells packages apps;

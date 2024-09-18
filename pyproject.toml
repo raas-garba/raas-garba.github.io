@@ -5,7 +5,6 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "raas-garba"
 authors = [ {name = "Paresh Adhia", email = "padhia+github@gmail.com"} ]
-dependencies = [ "PyYAML" ]
 description = "Library of Raas & Garba lyrics used by the Charlotte Navratri Group"
 readme = "README.md"
 requires-python = ">=3.12"
