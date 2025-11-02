@@ -16,7 +16,7 @@ extra:
 
 plugins:
   - search
-  - awesome-pages
+  - awesome-nav
 
 markdown_extensions:
   - toc:

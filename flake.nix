@@ -6,39 +6,39 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
-      with nixpkgs.legacyPackages.${system};
-      let
-        devShells.default = mkShell {
-          name = "mkdocs";
-          venvDir = "./.venv";
-          buildInputs = with python3Packages; [
-            mkdocs-material
-            mkdocs-awesome-pages-plugin
-            python3
-            ruff
-            build
-            wheel
-            venvShellHook
-          ];
-        };
-
-        mkdocs = python3.withPackages (p: with p; [
+  outputs = { nixpkgs, flake-utils, ... }:
+  flake-utils.lib.eachDefaultSystem (system:
+    with nixpkgs.legacyPackages.${system};
+    let
+      devShells.default = mkShell {
+        name = "mkdocs";
+        venvDir = "./.venv";
+        buildInputs = with python3Packages; [
+          pkgs.ruff
+          pkgs.uv
           mkdocs-material
-          mkdocs-awesome-pages-plugin
-        ]);
+          mkdocs-awesome-nav
+          python
+          venvShellHook
+        ];
+      };
 
-        serve-docs = pkgs.writeShellScriptBin "serve-docs" ''
-          exec "${mkdocs}/bin/mkdocs" serve
-        '';
+      mkdocs = python3.withPackages (p: with p; [
+        mkdocs-material
+        mkdocs-awesome-nav
+      ]);
 
-        packages.default = serve-docs;
-        apps.default.type = "app";
-        apps.default.program = "${packages.default}/bin/serve-docs";
+      packages.default = pkgs.writeShellScriptBin "serve-docs" ''
+        exec "${mkdocs}/bin/mkdocs" serve
+      '';
 
-      in {
-        inherit devShells packages apps;
-      }
-    );
+      apps.default.type = "app";
+      apps.default.program = "${packages.default}/bin/serve-docs";
+      apps.mkdocs.type = "app";
+      apps.mkdocs.program = "${mkdocs}/bin/mkdocs";
+
+    in {
+      inherit devShells packages apps;
+    }
+  );
 }
